@@ -9,3 +9,4 @@
 | 2026-07-24 | HOURS | Deployed Atomic Red Team on WKSTN01 via offline transfer, unified timezone, isolated lab by disabling NAT, executed T1136.001 and confirmed Wazuh detection via rules 60109 and 60110 | evidence/screenshots |
 | 2026-07-24 | 4 | Deployed Atomic Red Team on WKSTN01 via offline transfer, unified timezone, isolated lab by disabling NAT, executed T1136.001 and confirmed Wazuh detection via rules 60109 and 60110 | evidence/screenshots |
 | 2026-07-25 | 3 | Simulated scheduled task technique, enabled audit policy to surface Event 4698, confirmed Wazuh detection, authored two portable Sigma rules | evidence/screenshots |
+| 2026-07-25 | HOURS | Simulated scheduled task technique, enabled audit policy to surface Event 4698, confirmed Wazuh detection, authored two portable Sigma rules | evidence/screenshots |
