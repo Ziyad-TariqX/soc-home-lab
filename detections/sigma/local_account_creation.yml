@@ -1,0 +1,21 @@
+title: Local Account Creation
+id: 7a8b6c2d-9e4f-4a1b-b3c5-2d6e8f0a1c3b
+status: experimental
+description: Detects creation of a new local user account via Windows Security Event 4720
+references:
+    - https://attack.mitre.org/techniques/T1136/001/
+author: Ziyad Tariq
+date: 2026-07-25
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4720
+    condition: selection
+falsepositives:
+    - Legitimate administrative account creation
+level: medium
+tags:
+    - attack.persistence
+    - attack.t1136.001
