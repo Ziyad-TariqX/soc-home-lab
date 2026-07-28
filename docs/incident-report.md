@@ -20,6 +20,7 @@ The monitoring solution is based on Wazuh version 4.14.6, deployed on the WAZUH 
 Logs are forwarded from the endpoints using a **Wazuh agent** installed on each Windows machine. Each agent sends its logs to the Wazuh Manager over port **1514**.
 
 The lab uses two network adapters per machine: one providing general internet access and a second host-only adapter connecting the machines to each other. Once setup is complete, the internet-facing adapter is disabled, leaving the machines connected but fully isolated through the host-only network.
+![Wazuh dashboard showing both agents active](../evidence/screenshots/VirtualBox_WAZUH_22_07_2026_15_20_44.png)
 
 ### 1.3 Logging and Audit Policy
 Scheduled task creation (T1053.005) was executed on WKSTN01 but produced no alert. The local Windows log showed the event was never recorded, because the relevant audit subcategory under Object Access is disabled by default.
@@ -34,6 +35,7 @@ Two techniques were simulated on the victim host WKSTN01 using Atomic Red Team.
 
 1. **Create Local Account (T1136.001):** Adversaries create a local account to maintain access to victim systems. Local accounts are configured by an organization for use by users, remote support, services, or administration on a single system.
    *Executed:* A local user named `atk_user` was created via PowerShell.
+   ![atk_user account created on WKSTN01](../evidence/screenshots/VirtualBox_WKSTN01_24_07_2026_07_06_36.png)
 
 2. **Create Scheduled Task (T1053.005):** Adversaries may abuse the Windows Task Scheduler to perform task scheduling for initial or recurring execution of malicious code.
    *Executed:* A scheduled task was created to run on system startup and logon.
@@ -58,6 +60,7 @@ Two techniques were simulated on the victim host WKSTN01 using Atomic Red Team.
 As this was a controlled simulation in an isolated lab, full incident containment was not required. However, the equivalent controls were applied:
 
 - **Containment:** The lab is isolated by design on a host-only network with no external access, mirroring the real-world first step of isolating a compromised host from the network.
+![Lab isolation verified: external blocked, internal reachable](../evidence/screenshots/VirtualBox_WKSTN01_24_07_2026_07_07_45.png)
 
 - **Eradication:** After each simulation, the artifacts created by the attack (such as the `atk_user` account and the scheduled task) were removed using Atomic Red Team's `-Cleanup` function.
 
