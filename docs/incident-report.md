@@ -40,8 +40,10 @@ Two techniques were simulated on the victim host WKSTN01 using Atomic Red Team.
 
 ### 2.2 Detection Results
 1. **Create Local Account (T1136.001):** Detected in Wazuh Threat Hunting on WKSTN01 (Jul 24, 2026). A single account creation generated multiple alerts: rule `60109` (account enabled/created) and rule `60110` (account changed), both at level 8, corresponding to Windows Event ID 4720.
+![Account creation detected in Wazuh](../evidence/screenshots/VirtualBox_WAZUH_24_07_2026_07_44_00.png)
 
 2. **Create Scheduled Task (T1053.005):** Detected on WKSTN01 (Jul 25, 2026), rule `60228` at level 4, corresponding to Windows Event ID 4698.
+![Scheduled task and audit policy change detected in Wazuh](../evidence/screenshots/VirtualBox_WAZUH_25_07_2026_15_31_22.png)
 
 3. **Audit Policy Change (side effect):** Enabling the audit policy was itself detected by rule `60112` at level 8 ("Windows Audit Policy changed"). This is significant because adversaries often modify audit settings to blind monitoring, making the detection of such changes a high-value alert.
 
