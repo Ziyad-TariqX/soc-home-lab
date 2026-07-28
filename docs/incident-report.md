@@ -46,12 +46,6 @@ Two techniques were simulated on the victim host WKSTN01 using Atomic Red Team.
 3. **Audit Policy Change (side effect):** Enabling the audit policy was itself detected by rule `60112` at level 8 ("Windows Audit Policy changed"). This is significant because adversaries often modify audit settings to blind monitoring, making the detection of such changes a high-value alert.
 
 ### 2.3 Detection Gaps Identified
-Scheduled task creation (T1053.005) was executed on WKSTN01 but produced no alert. The local Windows log showed the event was never recorded, because the relevant audit subcategory under Object Access is disabled by default.
-
-
-## 3. Containment, Eradication, and Recovery
-### 2.3 Detection Gaps Identified
-
 1. **Missing audit policy at the log source:** Scheduled task creation (T1053.005) initially produced no alert because Windows was not logging the event by default (see section 1.3). This confirmed that detection depends on correct audit configuration before any SIEM rule applies.
 
 2. **Untested technique — service creation:** Windows service creation (T1543.003) could not be executed in the isolated environment. One test targeted a service that does not exist on the host, and another required an external binary blocked by the isolation. This technique therefore remains outside current detection coverage.
