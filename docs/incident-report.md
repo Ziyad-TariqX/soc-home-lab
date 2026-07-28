@@ -50,6 +50,9 @@ Two techniques were simulated on the victim host WKSTN01 using Atomic Red Team.
 
 3. **Audit Policy Change (unintended detection):** Enabling the audit policy was itself detected by rule `60112` at level 8 ("Windows Audit Policy changed"). This is significant because adversaries often modify audit settings to blind monitoring, making the detection of such changes a high-value alert.
 
+4. **Privilege Escalation — Admin Group Membership (T1136.001, test 8):** Adding a user to the local Administrators group was detected by rule `60154` at level 12 ("Administrators Group Changed"), corresponding to Windows Event ID 4732. This was the highest-severity alert observed, reflecting the elevated risk of privilege escalation.
+![Privilege escalation to admin group detected in Wazuh](../evidence/screenshots/VirtualBox_WAZUH_28_07_2026_08_06_15.png)
+
 ### 2.3 Detection Gaps Identified
 1. **Missing audit policy at the log source:** As detailed in section 1.3, scheduled task creation initially produced no alert because the required audit policy was disabled by default. This confirmed that detection depends on correct audit configuration before any SIEM rule applies.
 
@@ -58,14 +61,19 @@ Two techniques were simulated on the victim host WKSTN01 using Atomic Red Team.
 3. **Domain Controller not tested:** All simulated attacks targeted the workstation WKSTN01 only. The Domain Controller (DC01), the highest-value target in any network, was never attacked, so detection coverage for domain-level activity is currently unverified.
 
 ## 3. Containment, Eradication, and Recovery
-As this was a controlled simulation in an isolated lab, full incident containment was not required. However, the equivalent controls were applied:
+To demonstrate a realistic incident response, the created admin account (`atk_admin`) was handled following the NIST containment-first approach rather than being deleted immediately.
 
-- **Containment:** The lab is isolated by design on a host-only network with no external access, mirroring the real-world first step of isolating a compromised host from the network.
+- **Investigation:** The account was first examined using PowerShell. Its `LastLogon` field was empty, confirming the account had been created but never used to log in (no Event ID 4624). This indicated the threat was caught before any malicious activity occurred.
+
+- **Containment:** The account was disabled and removed from the local Administrators group, rather than deleted. Disabling immediately stops the account from being used while preserving it as evidence for investigation. Deleting an account too early would destroy forensic evidence needed to understand the attack.
+
+- **Eradication:** Only after investigation and documentation was the account permanently removed using PowerShell.
+![Incident response: account disabled, removed from admins, then deleted](../evidence/screenshots/VirtualBox_WKSTN01_28_07_2026_08_43_19.png)
+
+- **Recovery:** The environment was verified to contain no remaining suspicious accounts. A VirtualBox snapshot taken before the attacks provided a clean rollback point, allowing each machine to be restored to a known-good state.
+
+The lab itself is isolated by design on a host-only network with no external access, which mirrors the real-world first step of isolating a compromised host from the network.
 ![Lab isolation verified: external blocked, internal reachable](../evidence/screenshots/VirtualBox_WKSTN01_24_07_2026_07_07_45.png)
-
-- **Eradication:** After each simulation, the artifacts created by the attack (such as the `atk_user` account and the scheduled task) were removed using Atomic Red Team's `-Cleanup` function.
-
-- **Recovery:** A VirtualBox snapshot taken before the attacks provided a clean rollback point, allowing each machine to be restored to a known-good state.
 
 ## 4. Post-Incident Activity
 ### 4.1 Lessons Learned

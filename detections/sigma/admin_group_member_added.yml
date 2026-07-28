@@ -1,0 +1,22 @@
+title: Admin Group Member Added
+id: 12de553c-4312-41ca-acdf-f4e86fe8111f
+status: experimental
+description: Detects a user being added to the local Administrators group via Windows Security Event 4732
+references:
+    - https://attack.mitre.org/techniques/T1098/
+author: Ziyad Tariq
+date: 2026-07-28
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4732
+    condition: selection
+falsepositives:
+    - Legitimate administrative account privilege assignment
+level: medium
+tags:
+    - attack.persistence
+    - attack.t1098
+    - attack.privilege-escalation
